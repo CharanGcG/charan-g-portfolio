@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://charan-g.dev/sitemap.xml
