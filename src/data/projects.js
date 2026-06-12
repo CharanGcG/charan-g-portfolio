@@ -16,8 +16,8 @@ export const projects = [
       { value: "780+", label: "user interactions" },
     ],
     links: [
-      { label: "Live Demo", href: "https://dsa-games.vercel.app", icon: "ExternalLink" },
-      { label: "Source Code", href: "https://github.com/charan-g/dsa-games", icon: "Github" },
+      { label: "Live Demo", href: "https://dsa-games-ruby.vercel.app/", icon: "ExternalLink" },
+      { label: "Source Code", href: "https://github.com/CharanGcG/dsa-games", icon: "Github" },
     ],
     accent: "aurora",
   },
