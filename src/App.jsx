@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar.jsx";
 import Chatbot from "./components/Chatbot.jsx";
 import Footer from "./components/Footer.jsx";
 import Hero from "./sections/Hero.jsx";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react";
 
 const About = lazy(() => import("./sections/About.jsx"));
 const Experience = lazy(() => import("./sections/Experience.jsx"));
