@@ -1,16 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { getMockResponse, starterPrompts } from "../data/chatbot.js";
+import { getAssistantResponse, suggestionPrompts } from "../utils/aiEngine.js";
+import { trackAIChatOpen } from "../utils/analytics.js";
 import { icons } from "./icons.js";
 
 const initialMessages = [
   {
     role: "assistant",
-    text: "Hi, I'm Charan AI. Ask me about Charan's experience, projects, skills, or achievements.",
+    text: "Hi, I'm Charan AI. I can tell you about Charan's experience, projects, skills, and achievements. Try asking one of the questions below.",
   },
 ];
 
-export default function Chatbot() {
+function TypingIndicator() {
+  return (
+    <div className="flex items-center gap-1" aria-label="Charan AI is typing">
+      {[0, 1, 2].map((item) => (
+        <motion.span
+          key={item}
+          className="h-1.5 w-1.5 rounded-full bg-cyan-100/80"
+          animate={{ opacity: [0.35, 1, 0.35], y: [0, -2, 0] }}
+          transition={{ duration: 0.9, repeat: Infinity, delay: item * 0.12 }}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function ChatModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState(initialMessages);
   const [input, setInput] = useState("");
@@ -48,8 +64,16 @@ export default function Chatbot() {
   }, [isOpen]);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, isThinking]);
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: shouldReduceMotion ? "auto" : "smooth",
+    });
+  }, [messages, isThinking, shouldReduceMotion]);
+
+  const openChat = () => {
+    trackAIChatOpen();
+    setIsOpen(true);
+  };
 
   const submitMessage = (value = input) => {
     const trimmed = value.trim();
@@ -64,17 +88,17 @@ export default function Chatbot() {
     window.setTimeout(() => {
       setMessages((current) => [
         ...current,
-        { role: "assistant", text: getMockResponse(trimmed) },
+        { role: "assistant", text: getAssistantResponse(trimmed) },
       ]);
       setIsThinking(false);
-    }, shouldReduceMotion ? 0 : 650);
+    }, shouldReduceMotion ? 0 : 720);
   };
 
   return (
     <>
       <motion.button
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={openChat}
         whileHover={shouldReduceMotion ? undefined : { y: -3 }}
         whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
         className="fixed bottom-5 right-5 z-50 inline-flex min-h-12 items-center gap-2 rounded-full border border-cyan-200/20 bg-slate-100 px-4 text-sm font-bold text-black shadow-glow transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora focus-visible:ring-offset-2 focus-visible:ring-offset-ink sm:bottom-7 sm:right-7"
@@ -100,7 +124,7 @@ export default function Chatbot() {
               animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
               exit={shouldReduceMotion ? undefined : { opacity: 0, y: 24, scale: 0.98 }}
               transition={{ duration: 0.24, ease: "easeOut" }}
-              className="glass-panel flex max-h-[86vh] w-full max-w-[430px] flex-col overflow-hidden rounded-xl"
+              className="glass-panel flex max-h-[86vh] w-full max-w-[440px] flex-col overflow-hidden rounded-xl"
             >
               <div className="flex items-center justify-between border-b border-white/10 p-4">
                 <div className="flex items-center gap-3">
@@ -111,7 +135,7 @@ export default function Chatbot() {
                     <h2 id="chatbot-title" className="text-sm font-semibold text-white">
                       Ask Charan AI
                     </h2>
-                    <p className="text-xs text-slate-400">Mock knowledge assistant</p>
+                    <p className="text-xs text-slate-400">Client-side portfolio assistant</p>
                   </div>
                 </div>
                 <button
@@ -126,52 +150,66 @@ export default function Chatbot() {
 
               <div ref={scrollRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
                 <div className="rounded-lg border border-cyan-200/12 bg-cyan-300/8 p-3 text-xs leading-6 text-cyan-50">
-                  This UI is ready to connect to an OpenAI API later. For now, it uses local mock responses from <span className="font-semibold">src/data/chatbot.js</span>.
+                  Runs entirely in the browser using a local portfolio knowledge base. No external AI APIs or paid services.
                 </div>
 
-                {messages.map((message, index) => {
-                  const isUser = message.role === "user";
-                  const Icon = isUser ? UserIcon : SparklesIcon;
-                  return (
-                    <div key={`${message.role}-${index}`} className={`flex gap-3 ${isUser ? "justify-end" : ""}`}>
-                      {!isUser ? (
-                        <div className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/[0.06] text-cyan-100">
-                          <Icon className="h-4 w-4" aria-hidden="true" />
-                        </div>
-                      ) : null}
-                      <div
-                        className={`max-w-[82%] rounded-xl px-4 py-3 text-sm leading-6 ${
-                          isUser
-                            ? "bg-slate-100 text-black"
-                            : "border border-white/10 bg-white/[0.06] text-slate-200"
-                        }`}
+                <AnimatePresence initial={false}>
+                  {messages.map((message, index) => {
+                    const isUser = message.role === "user";
+                    const Icon = isUser ? UserIcon : SparklesIcon;
+                    return (
+                      <motion.div
+                        key={`${message.role}-${index}-${message.text}`}
+                        initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+                        animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                        exit={shouldReduceMotion ? undefined : { opacity: 0, y: -8 }}
+                        transition={{ duration: 0.22, ease: "easeOut" }}
+                        className={`flex gap-3 ${isUser ? "justify-end" : ""}`}
                       >
-                        {message.text}
-                      </div>
-                    </div>
-                  );
-                })}
+                        {!isUser ? (
+                          <div className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/[0.06] text-cyan-100">
+                            <Icon className="h-4 w-4" aria-hidden="true" />
+                          </div>
+                        ) : null}
+                        <div
+                          className={`max-w-[82%] rounded-xl px-4 py-3 text-sm leading-6 ${
+                            isUser
+                              ? "bg-slate-100 text-black"
+                              : "border border-white/10 bg-white/[0.06] text-slate-200"
+                          }`}
+                        >
+                          {message.text}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
 
                 {isThinking ? (
-                  <div className="flex gap-3" aria-live="polite">
+                  <motion.div
+                    className="flex gap-3"
+                    aria-live="polite"
+                    initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+                    animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                  >
                     <div className="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/[0.06] text-cyan-100">
                       <SparklesIcon className="h-4 w-4" aria-hidden="true" />
                     </div>
-                    <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm text-slate-300">
-                      Thinking...
+                    <div className="rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3">
+                      <TypingIndicator />
                     </div>
-                  </div>
+                  </motion.div>
                 ) : null}
               </div>
 
               <div className="border-t border-white/10 p-4">
                 <div className="mb-3 flex flex-wrap gap-2">
-                  {starterPrompts.map((prompt) => (
+                  {suggestionPrompts.map((prompt) => (
                     <button
                       type="button"
                       key={prompt}
                       onClick={() => submitMessage(prompt)}
-                      className="rounded-md border border-white/10 bg-white/[0.05] px-2.5 py-1.5 text-left text-xs text-slate-300 transition hover:bg-white/[0.09] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora"
+                      className="rounded-md border border-white/10 bg-white/[0.05] px-2.5 py-1.5 text-left text-xs text-slate-300 transition hover:border-cyan-200/20 hover:bg-white/[0.09] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora"
                     >
                       {prompt}
                     </button>

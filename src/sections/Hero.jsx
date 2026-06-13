@@ -1,15 +1,17 @@
 import { motion, useReducedMotion } from "framer-motion";
 import heroVisual from "../assets/hero-abstract.png";
 import { profile } from "../data/profile.js";
+import {
+  trackContactButtonClick,
+  trackResumeDownload,
+} from "../utils/analytics.js";
 import AnimatedBackground from "../components/AnimatedBackground.jsx";
 import Button from "../components/Button.jsx";
 import Container from "../components/Container.jsx";
 import SocialLinks from "../components/SocialLinks.jsx";
-import { icons } from "../components/icons.js";
 
 export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
-  const SparklesIcon = icons.Sparkles;
 
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden pt-20">
@@ -21,19 +23,18 @@ export default function Hero() {
           initial={shouldReduceMotion ? false : { opacity: 0, y: 28 }}
           animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-3xl"
+          className="max-w-2xl"
         >
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-100">
-            <SparklesIcon className="h-3.5 w-3.5" aria-hidden="true" />
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-200/15 bg-white/[0.05] px-3 py-2 text-xs font-semibold tracking-[0.08em] text-cyan-50 shadow-[0_0_40px_rgba(34,211,238,0.08)]">
             <span>{profile.hero.eyebrow}</span>
           </div>
           <h1 className="text-balance text-5xl font-semibold tracking-normal text-white sm:text-6xl lg:text-7xl">
             {profile.hero.greeting}
           </h1>
-          <p className="mt-6 text-balance text-2xl font-medium leading-tight text-slate-200 sm:text-3xl lg:text-4xl">
+          <p className="mt-6 text-balance text-xl font-medium leading-[1.15] text-slate-200 sm:text-2xl lg:text-3xl">
             {profile.hero.headline}
           </p>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-slate-400 sm:text-lg">
+          <p className="mt-6 max-w-xl text-base leading-8 text-slate-400">
             {profile.hero.description}
           </p>
 
@@ -41,16 +42,27 @@ export default function Hero() {
             <Button href="#projects" icon="ArrowRight">
               View Projects
             </Button>
-            <Button href={profile.resumeHref} icon="Download" variant="secondary" download>
+            <Button
+              href={profile.resumeHref}
+              icon="Download"
+              variant="secondary"
+              download
+              onClick={() => trackResumeDownload("hero")}
+            >
               Download Resume
             </Button>
-            <Button href="#contact" icon="Mail" variant="ghost">
+            <Button
+              href="#contact"
+              icon="Mail"
+              variant="ghost"
+              onClick={() => trackContactButtonClick("hero")}
+            >
               Contact Me
             </Button>
           </div>
 
           <div className="mt-8">
-            <SocialLinks />
+            <SocialLinks source="hero" />
           </div>
         </motion.div>
 

@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { navItems, profile } from "../data/profile.js";
+import {
+  trackContactButtonClick,
+  trackResumeDownload,
+} from "../utils/analytics.js";
 import Button from "./Button.jsx";
 import Container from "./Container.jsx";
 import { icons } from "./icons.js";
@@ -41,10 +45,20 @@ export default function Navbar() {
           </div>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <Button href={profile.resumeHref} icon="Download" variant="secondary" download>
+            <Button
+              href={profile.resumeHref}
+              icon="Download"
+              variant="secondary"
+              download
+              onClick={() => trackResumeDownload("navbar")}
+            >
               Resume
             </Button>
-            <Button href="#contact" icon="ArrowRight">
+            <Button
+              href="#contact"
+              icon="ArrowRight"
+              onClick={() => trackContactButtonClick("navbar")}
+            >
               Contact
             </Button>
           </div>
@@ -87,10 +101,19 @@ export default function Navbar() {
                   variant="secondary"
                   download
                   className="w-full"
+                  onClick={() => trackResumeDownload("mobile_nav")}
                 >
                   Resume
                 </Button>
-                <Button href="#contact" icon="ArrowRight" className="w-full" onClick={closeMenu}>
+                <Button
+                  href="#contact"
+                  icon="ArrowRight"
+                  className="w-full"
+                  onClick={() => {
+                    trackContactButtonClick("mobile_nav");
+                    closeMenu();
+                  }}
+                >
                   Contact
                 </Button>
               </div>

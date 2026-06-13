@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import Navbar from "./components/Navbar.jsx";
-import Chatbot from "./components/Chatbot.jsx";
+import ChatModal from "./components/ChatModal.jsx";
 import Footer from "./components/Footer.jsx";
 import Hero from "./sections/Hero.jsx";
 import { Analytics } from "@vercel/analytics/react";
@@ -37,7 +37,8 @@ export default function App() {
         </Suspense>
       </main>
       <Footer />
-      <Chatbot />
+      <ChatModal />
+      <Analytics />
     </div>
   );
 }

@@ -25,7 +25,7 @@ export default function Button({
 
   if (href) {
     return (
-      <a className={classes} href={href} download={download} aria-label={ariaLabel}>
+      <a className={classes} href={href} download={download} aria-label={ariaLabel} onClick={onClick}>
         <span>{children}</span>
         {Icon ? <Icon className="h-4 w-4" aria-hidden="true" /> : null}
       </a>

@@ -1,4 +1,9 @@
 import { profile } from "../data/profile.js";
+import {
+  trackEmailClick,
+  trackResumeDownload,
+  trackSocialClick,
+} from "../utils/analytics.js";
 import Button from "../components/Button.jsx";
 import Container from "../components/Container.jsx";
 import Reveal from "../components/Reveal.jsx";
@@ -26,10 +31,20 @@ export default function Contact() {
                 I enjoy building reliable systems, useful automation, and interfaces that feel sharp in production.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href={`mailto:${profile.email}`} icon="Mail">
+                <Button
+                  href={`mailto:${profile.email}`}
+                  icon="Mail"
+                  onClick={() => trackEmailClick("contact_cta")}
+                >
                   Email Charan
                 </Button>
-                <Button href={profile.resumeHref} icon="Download" variant="secondary" download>
+                <Button
+                  href={profile.resumeHref}
+                  icon="Download"
+                  variant="secondary"
+                  download
+                  onClick={() => trackResumeDownload("contact")}
+                >
                   Download Resume
                 </Button>
               </div>
@@ -48,6 +63,7 @@ export default function Contact() {
                       href={social.href}
                       target={social.href.startsWith("http") ? "_blank" : undefined}
                       rel={social.href.startsWith("http") ? "noreferrer" : undefined}
+                      onClick={() => trackSocialClick(social.label, "contact_card")}
                       className="group flex items-center gap-4 rounded-lg border border-white/10 bg-black/20 p-4 transition hover:border-white/20 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora"
                     >
                       <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-white/[0.06] text-slate-100">

@@ -1,10 +1,26 @@
 import { projects } from "../data/projects.js";
+import {
+  trackContactButtonClick,
+  trackProjectDemoClick,
+  trackProjectSourceClick,
+} from "../utils/analytics.js";
 import Badge from "../components/Badge.jsx";
 import Button from "../components/Button.jsx";
 import Container from "../components/Container.jsx";
 import Reveal from "../components/Reveal.jsx";
 import SectionHeading from "../components/SectionHeading.jsx";
 import { icons } from "../components/icons.js";
+
+const projectAccentStyles = {
+  teal: {
+    card: "hover:border-teal-300/20 hover:shadow-[0_24px_90px_rgba(45,212,191,0.08)]",
+    icon: "text-teal-200",
+  },
+  purple: {
+    card: "hover:border-violet-300/20 hover:shadow-[0_24px_90px_rgba(167,139,250,0.08)]",
+    icon: "text-violet-200",
+  },
+};
 
 export default function Projects() {
   const CheckIcon = icons.Check;
@@ -21,7 +37,11 @@ export default function Projects() {
         <div className="grid gap-6 lg:grid-cols-2">
           {projects.map((project, index) => (
             <Reveal key={project.title} delay={index * 0.08}>
-              <article className="glass-panel gradient-ring flex h-full flex-col rounded-xl p-6 transition duration-300 hover:-translate-y-1 sm:p-8">
+              <article
+                className={`glass-panel gradient-ring flex h-full flex-col rounded-xl p-6 transition duration-300 hover:-translate-y-1 sm:p-8 ${
+                  projectAccentStyles[project.accent]?.card ?? ""
+                }`}
+              >
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-100">
@@ -39,7 +59,12 @@ export default function Projects() {
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   {project.features.map((feature) => (
                     <div key={feature} className="flex gap-3 rounded-lg bg-white/[0.04] p-3 text-sm text-slate-300">
-                      <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-lime-200" aria-hidden="true" />
+                      <CheckIcon
+                        className={`mt-0.5 h-4 w-4 shrink-0 ${
+                          projectAccentStyles[project.accent]?.icon ?? "text-lime-200"
+                        }`}
+                        aria-hidden="true"
+                      />
                       <span>{feature}</span>
                     </div>
                   ))}
@@ -71,12 +96,22 @@ export default function Projects() {
                         icon={link.icon}
                         variant={linkIndex === 0 ? "primary" : "secondary"}
                         className="sm:min-w-36"
+                        onClick={() =>
+                          link.label === "Live Demo"
+                            ? trackProjectDemoClick(project.title)
+                            : trackProjectSourceClick(project.title)
+                        }
                       >
                         {link.label}
                       </Button>
                     ))
                   ) : (
-                    <Button href="#contact" icon="Mail" variant="secondary">
+                    <Button
+                      href="#contact"
+                      icon="Mail"
+                      variant="secondary"
+                      onClick={() => trackContactButtonClick(`project:${project.title}`)}
+                    >
                       Discuss Project
                     </Button>
                   )}

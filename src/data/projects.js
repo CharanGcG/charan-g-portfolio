@@ -19,7 +19,7 @@ export const projects = [
       { label: "Live Demo", href: "https://dsa-games-ruby.vercel.app/", icon: "ExternalLink" },
       { label: "Source Code", href: "https://github.com/CharanGcG/dsa-games", icon: "Github" },
     ],
-    accent: "aurora",
+    accent: "teal",
   },
   {
     title: "AI Jenkins Pipeline Triage Assistant",
@@ -38,6 +38,6 @@ export const projects = [
       { value: "CI/CD", label: "operations support" },
     ],
     links: [],
-    accent: "solar",
+    accent: "purple",
   },
 ];

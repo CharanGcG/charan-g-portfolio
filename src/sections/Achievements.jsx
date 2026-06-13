@@ -16,11 +16,11 @@ export default function Achievements() {
         <div className="grid gap-6 lg:grid-cols-2">
           {achievements.map((achievement, index) => (
             <Reveal key={achievement.title} delay={index * 0.08}>
-              <article className="glass-panel gradient-ring relative h-full overflow-hidden rounded-xl p-7 sm:p-8">
-                <div className="absolute right-6 top-5 text-6xl opacity-20" aria-hidden="true">
+              <article className="glass-panel gradient-ring relative h-full overflow-hidden rounded-xl border-amber-300/10 p-7 transition duration-300 hover:border-amber-300/20 hover:shadow-[0_24px_90px_rgba(245,158,11,0.07)] sm:p-8">
+                <div className="absolute right-6 top-5 text-6xl opacity-15" aria-hidden="true">
                   {achievement.icon}
                 </div>
-                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-100">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-amber-100">
                   {achievement.metric}
                 </p>
                 <h3 className="mt-4 max-w-md text-2xl font-semibold tracking-normal text-white">

@@ -14,7 +14,7 @@ export const profile = {
   tagline:
     "Building scalable applications, intelligent systems, and developer productivity tools.",
   hero: {
-    eyebrow: "Available for full-time software engineering roles",
+    eyebrow: "🎯 2026 Computer Science Graduate • Open to Software Engineer Roles",
     greeting: "Hi, I'm Charan 👋",
     headline:
       "Software Engineer specializing in Full Stack Development, AI Applications, and DevOps.",

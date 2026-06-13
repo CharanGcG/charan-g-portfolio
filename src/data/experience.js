@@ -4,7 +4,7 @@ export const experiences = [
     role: "Associate Software Developer Intern",
     period: "Jan 2026 - Jul 2026",
     location: "Bengaluru, India",
-    accent: "aurora",
+    accent: "oracle",
     highlights: [
       "Built deployment automation scripts reducing pipeline execution time by 70-80 minutes.",
       "Developed an AI-powered Jenkins troubleshooting assistant using MCP architecture.",
@@ -17,7 +17,7 @@ export const experiences = [
     role: "SDET Intern",
     period: "May 2025 - Jul 2025",
     location: "Bengaluru, India",
-    accent: "signal",
+    accent: "netradyne",
     highlights: [
       "Developed automated API validation scripts using Python and Pytest.",
       "Built reusable testing frameworks integrated with GitHub.",
