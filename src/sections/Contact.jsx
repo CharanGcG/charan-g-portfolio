@@ -12,7 +12,7 @@ import { icons } from "../components/icons.js";
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative py-24 sm:py-28">
+    <section id="contact" className="relative py-20 pb-36 sm:py-28">
       <Container>
         <SectionHeading
           eyebrow="Contact"
@@ -23,18 +23,19 @@ export default function Contact() {
 
         <Reveal className="glass-panel mx-auto max-w-4xl overflow-hidden rounded-xl">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="p-6 sm:p-8 lg:p-10">
-              <p className="text-2xl font-semibold tracking-normal text-white">
+            <div className="p-5 sm:p-8 lg:p-10">
+              <p className="text-xl font-semibold leading-tight tracking-normal text-white sm:text-2xl">
                 Have a role, project, or engineering problem worth solving?
               </p>
-              <p className="mt-4 text-base leading-8 text-slate-400">
+              <p className="mt-4 text-sm leading-7 text-slate-400 sm:text-base sm:leading-8">
                 I enjoy building reliable systems, useful automation, and interfaces that feel sharp in production.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row">
                 <Button
                   href={`mailto:${profile.email}`}
                   icon="Mail"
                   onClick={() => trackEmailClick("contact_cta")}
+                  className="w-full sm:w-auto"
                 >
                   Email Charan
                 </Button>
@@ -44,13 +45,14 @@ export default function Contact() {
                   variant="secondary"
                   download
                   onClick={() => trackResumeDownload("contact")}
+                  className="w-full sm:w-auto"
                 >
                   Download Resume
                 </Button>
               </div>
             </div>
 
-            <div className="border-t border-white/10 bg-white/[0.035] p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
+            <div className="border-t border-white/10 bg-white/[0.035] p-5 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
               <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-100">
                 Connect
               </h3>
@@ -64,10 +66,10 @@ export default function Contact() {
                       target={social.href.startsWith("http") ? "_blank" : undefined}
                       rel={social.href.startsWith("http") ? "noreferrer" : undefined}
                       onClick={() => trackSocialClick(social.label, "contact_card")}
-                      className="group flex items-center gap-4 rounded-lg border border-white/10 bg-black/20 p-4 transition hover:border-white/20 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora"
+                      className="group flex items-center gap-3 rounded-lg border border-white/10 bg-black/20 p-3.5 transition hover:border-white/20 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora sm:gap-4 sm:p-4"
                     >
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-white/[0.06] text-slate-100">
-                        {Icon ? <Icon className="h-5 w-5" aria-hidden="true" /> : null}
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white/[0.06] text-slate-100 sm:h-11 sm:w-11">
+                        {Icon ? <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" /> : null}
                       </span>
                       <span className="min-w-0">
                         <span className="block text-sm font-semibold text-white">
